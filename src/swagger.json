@@ -1,0 +1,391 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "To do management",
+        "description": "This is an API for managing lists of todos from different users",
+        "version": "1.0.0",
+        "contact": {
+            "email": "eric.robotic@gmail.com"
+        }
+    },
+    "paths": {
+        "/users": {
+            "post": {
+                "tags": ["User"],
+                "summary": "Create a user",
+                "description": "Create a new user",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "username": {
+                                        "type": "string"
+                                    }
+                                },
+                                "example": {
+                                    "name": "Name sample",
+                                    "username": "User name sample"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "string",
+                                            "format": "uuidv4"
+                                        },
+                                        "name": {
+                                            "type": "string"
+                                        },
+                                        "username": {
+                                            "type": "string"
+                                        },
+                                        "todos": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "string",
+                                                        "format": "uuidv4"
+                                                    },
+                                                    "title": {
+                                                        "type": "string"
+                                                    },
+                                                    "done": {
+                                                        "type": "boolean"
+                                                    },
+                                                    "deadline": {
+                                                        "type": "Date"
+                                                    },
+                                                    "created_at": {
+                                                        "type": "Date"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "User already exists!"
+                    }
+                }
+            }
+        },
+        "/todos": {
+            "post": {
+                "tags": ["Todo"],
+                "summary": "Create a todo",
+                "description": "Create a new todo for a specific user",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "title": {
+                                        "type": "string"
+                                    },
+                                    "deadline": {
+                                        "type": "string"
+                                    },
+                                    "username": {
+                                        "type": "string"
+                                    }
+                                },
+                                "example": {
+                                    "title": "Title sample",
+                                    "deadline": "yyyy-mm-dd",
+                                    "username": "User name sample"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "string",
+                                            "format": "uuidv4"
+                                        },
+                                        "title": {
+                                            "type": "string"
+                                        },
+                                        "done": {
+                                            "type": "boolean"
+                                        },
+                                        "deadline": {
+                                            "type": "Date"
+                                        },
+                                        "created_at": {
+                                            "type": "Date"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "User not found!"
+                    }
+                }
+            },
+            "get": {
+                "tags": ["Todo"],
+                "summary": "List all todos",
+                "description": "List all todos from a specific user",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "username": {
+                                        "type": "string"
+                                    }
+                                },
+                                "example": {
+                                    "username": "User name sample"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "id": {
+                                                "type": "string",
+                                                "format": "uuidv4"
+                                            },
+                                            "title": {
+                                                "type": "string"
+                                            },
+                                            "done": {
+                                                "type": "boolean"
+                                            },
+                                            "deadline": {
+                                                "type": "Date"
+                                            },
+                                            "created_at": {
+                                                "type": "Date"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "User not found!"
+                    }
+                }
+            }
+        },
+        "/todos/{id}": {
+            "put": {
+                "tags": ["Todo"],
+                "summary": "Update todo",
+                "description": "Update a specific todo from a specific user",
+                "parameters": [{
+                    "name": "id",
+                    "in": "path",
+                    "description": "ID for the specific todo to be used",
+                    "required": "true",
+                    "type": "string",
+                    "format": "uuidv4"
+                }],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "title": {
+                                        "type": "string"
+                                    },
+                                    "deadline": {
+                                        "type": "string"
+                                    },
+                                    "username": {
+                                        "username": "string"
+                                    }
+                                },
+                                "example": {
+                                    "title": "Title sample",
+                                    "deadline": "yyyy-mm-dd",
+                                    "username": "User name sample"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "string",
+                                            "format": "uuidv4"
+                                        },
+                                        "title": {
+                                            "type": "string"
+                                        },
+                                        "done": {
+                                            "type": "boolean"
+                                        },
+                                        "deadline": {
+                                            "type": "Date"
+                                        },
+                                        "created_at": {
+                                            "type": "Date"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "User not found! /n OR /n The given user has no todo with the given id!"
+                    }
+                }
+            },
+            "delete": {
+                "tags": ["Todo"],
+                "summary": "Delete a todo",
+                "description": "Delete a specific todo from a specific user",
+                "parameters": [{
+                    "name": "id",
+                    "in": "path",
+                    "description": "ID for the specific todo to be used",
+                    "required": "true",
+                    "type": "string",
+                    "format": "uuidv4"
+                }],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "username": {
+                                        "username": "string"
+                                    }
+                                },
+                                "example": {
+                                    "username": "User name sample"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "Deleted"
+                    },
+                    "404": {
+                        "description": "User not found! /n OR /n The given user has no todo with the given id!"
+                    }
+                }
+            }
+        },
+        "/todos/{id}/done": {
+            "patch": {
+                "tags": ["Todo"],
+                "summary": "Mark todo as done",
+                "description": "Mark a specific todo from a specific user as done",
+                "parameters": [{
+                    "name": "id",
+                    "in": "path",
+                    "description": "ID for the specific todo to be used",
+                    "required": "true",
+                    "type": "string",
+                    "format": "uuidv4"
+                }],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "username": {
+                                        "username": "string"
+                                    }
+                                },
+                                "example": {
+                                    "username": "User name sample"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "string",
+                                            "format": "uuidv4"
+                                        },
+                                        "title": {
+                                            "type": "string"
+                                        },
+                                        "done": {
+                                            "type": "boolean"
+                                        },
+                                        "deadline": {
+                                            "type": "Date"
+                                        },
+                                        "created_at": {
+                                            "type": "Date"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "User not found! /n OR /n The given user has no todo with the given id!"
+                    }
+                }
+            }
+        }
+    }
+}
